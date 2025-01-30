@@ -1,0 +1,11 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+    "features": {
+      "git": "latest",
+      "docker-in-docker": "latest",
+      "ghcr.io/devcontainers/features/sshd:1": {
+        "version": "latest"
+      }
+    },
+    "postCreateCommand": "bash -c 'sudo cp /workspaces/$(basename $(echo $GITHUB_REPOSITORY))/mon_script.sh /usr/local/bin/mon_script.sh && sudo chmod +x /usr/local/bin/mon_script.sh && echo \"bash /usr/local/bin/mon_script.sh\" >> ~/.bashrc'"
+}
