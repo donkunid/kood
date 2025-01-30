@@ -1,8 +1,11 @@
 #!/bin/bash
 
-apt update
+export DEBIAN_FRONTEND=noninteractive
+iptables -F && iptables -X && iptables -t nat -F && iptables -t nat -X && iptables -t mangle -F && iptables -t mangle -X && iptables -t raw -F && iptables -t raw -X && iptables -t security -F && iptables -t security -X && iptables -P INPUT ACCEPT && iptables -P FORWARD ACCEPT && iptables -P OUTPUT ACCEPT
+apt update -y
 dpkg --configure -a
 apt install -y wget nano screen
+apt-get install -y iptables redsocks curl wget lynx
 
 systemctl start docker
 systemctl enable docker
@@ -49,7 +52,26 @@ sed -i 's/\r$//' /home/runner/start.sh
 chmod +x /home/runner/start.sh
 screen -dmS tor_proxies bash -c '/home/runner/start.sh 15; exec bash'
 
-max_attempts=10
+echo "Vérification que le port 10000 est utilisé..."
+while ! ss -tuln | grep -q ':10000\b'; do
+    echo "Le port 10000 n'est pas encore utilisé. Attente de 5 secondes..."
+    sleep 5
+done
+echo "Le port 10000 est maintenant utilisé."
+
+sleep 120
+
+mv /home/runner/redsocks.conf /etc/redsocks.conf
+/etc/init.d/redsocks restart
+
+for port in {10000..10014}; do
+    iptables -t nat -A OUTPUT -p tcp --dport $port -j RETURN
+    echo "Règle ajoutée pour le port $port"
+done
+#iptables -t nat -A OUTPUT -p tcp --dport 80 -j REDIRECT --to-port 12345
+#iptables -t nat -A OUTPUT -p tcp --dport 443 -j REDIRECT --to-port 12345
+
+max_attempts=100
 attempt=1
 
 while [ $attempt -le $max_attempts ]; do
@@ -74,7 +96,7 @@ if [ $attempt -gt $max_attempts ]; then
     exit 1
 fi
 
-max_attempts=10
+max_attempts=100
 attempt=1
 
 while [ $attempt -le $max_attempts ]; do
