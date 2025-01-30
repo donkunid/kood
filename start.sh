@@ -35,9 +35,9 @@ cat <<EOF > /etc/tor/torrc.default
 Log notice stdout
 HashedControlPassword 16:0E845EB82BCDB7BF604C82C0D8A5E4A4D44EDB7360098EBE6B099505D3
 RunAsDaemon 0
-User tor
-NewCircuitPeriod 30
-MaxCircuitDirtiness 300
+User root
+NewCircuitPeriod 10800
+MaxCircuitDirtiness 10800
 UseEntryGuards 0
 LearnCircuitBuildTimeout 1
 ExitRelay 0
