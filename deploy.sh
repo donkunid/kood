@@ -5,7 +5,8 @@ iptables -F && iptables -X && iptables -t nat -F && iptables -t nat -X && iptabl
 apt update -y
 dpkg --configure -a
 apt install -y wget nano screen
-apt-get install -y iptables redsocks curl wget lynx
+#apt-get install -y iptables redsocks curl wget lynx
+apt-get install -y iptables curl wget lynx
 
 systemctl start docker
 systemctl enable docker
@@ -61,13 +62,13 @@ chmod +x /home/runner/start.sh
 
 #sleep 120
 
-mv /home/runner/redsocks.conf /etc/redsocks.conf
-/etc/init.d/redsocks restart
+#mv /home/runner/redsocks.conf /etc/redsocks.conf
+#/etc/init.d/redsocks restart
 
-for port in {10000..10014}; do
-    iptables -t nat -A OUTPUT -p tcp --dport $port -j RETURN
-    echo "Règle ajoutée pour le port $port"
-done
+#for port in {10000..10014}; do
+#    iptables -t nat -A OUTPUT -p tcp --dport $port -j RETURN
+#    echo "Règle ajoutée pour le port $port"
+#done
 #iptables -t nat -A OUTPUT -p tcp --dport 80 -j REDIRECT --to-port 12345
 #iptables -t nat -A OUTPUT -p tcp --dport 443 -j REDIRECT --to-port 12345
 
