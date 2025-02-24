@@ -3,8 +3,7 @@
 export DEBIAN_FRONTEND=noninteractive
 iptables -F && iptables -X && iptables -t nat -F && iptables -t nat -X && iptables -t mangle -F && iptables -t mangle -X && iptables -t raw -F && iptables -t raw -X && iptables -t security -F && iptables -t security -X && iptables -P INPUT ACCEPT && iptables -P FORWARD ACCEPT && iptables -P OUTPUT ACCEPT
 apt update -y
-apt remove redsocks -y
-dpkg --configure -a
+dpkg --force-all --configure -a
 apt install -y wget nano screen
 #apt-get install -y iptables redsocks curl wget lynx
 apt-get install -y iptables curl wget lynx
